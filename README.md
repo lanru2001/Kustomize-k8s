@@ -26,18 +26,7 @@ The above diagram shows a common use case of a continuous delivery pipeline whic
 You like our article?
 Follow our LinkedIn monthly digest to receive more free educational content like this.
 
-Follow LinkedIn K8s digest
-Automated, Intelligent Container Sizing
-Kubernetes Vertical Pod Autoscaling doesn’t recommend pod limit values or consider I/O. Densify identifies mis-provisioned containers at a glance and prescribes the optimal configuration.
-
-Densify has partnered with Intel to offer one year of free resource optimization software licensing to qualified companies.
-
-Intel + Densify
-SEE IF YOUR COMPANY QUALIFIES
-Kustomize Features
-Kustomize is often used in conjunction with Helm as described above, and it's been embedded in Kubernetes since its March 2019 release of version 1.14 (invoked by the command apply -k).
-
-Kustomize offers the following valuable attributes:
+## Kustomize offers the following valuable attributes:
 
 Kubectl Native
 No need to install or manage as a separate dependency
@@ -49,12 +38,7 @@ Multiple Configurations
 Manages any number of different configurations
 Before we dive into Kustomize’s features, let’s compare Kustomize to native Helm and native Kubectl to better highlight the differentiated functionality that it offers.
 
-Functionality	Kustomize	Native Helm	Native Kubectl
-Templating	No templating	Complex templating	No templating
-Setup	No separate setup	Needs setup	No separate setup
-Configuration	Manage multiple configurations with one base file	Manage multiple configurations with one base file	Should have separate files for each different configuration
-Ease of Use	Easy learning curve	More difficult compared to the other two	Easy learning curve
-Benefits of Using Kustomize
+## Benefits of Using Kustomize
 1. Reusability
 Kustomize allows you to reuse one base file across all of your environments (development, staging, production) and then overlay unique specifications for each.
 
@@ -64,7 +48,7 @@ Since Kustomize has no templating language, you can use standard YAML to quickly
 3. Easier to Debug
 YAML itself is easy to understand and debug when things go wrong. Pair that with the fact that your configurations are isolated in patches, and you’ll be able to triangulate the root cause of performance issues in no time. Simply compare performance to your base configuration and any other variations that are running.
 
-Kubernetes Example
+## Kubernetes Example
 Let’s step through how Kustomize works using a deployment scenario involving 3 different environments: dev, staging, and production. In this example we’ll use service, deployment, and horizontal pod autoscaler resources. For the dev and staging environments, there won't be any HPA involved. All of the environments will use different types of services:
 
 Dev
