@@ -75,7 +75,6 @@ LoadBalancer
 They each will have different HPA settings. This is how directory structure looks:
 
 """
-
 ├── base
 │   ├── deployment.yaml
 │   ├── hpa.yaml
@@ -93,8 +92,7 @@ They each will have different HPA settings. This is how directory structure look
     └── staging
         ├── hpa.yaml
         ├── kustomization.yaml
-        └── service-nodeport.yaml
-        
+        └── service-nodeport.yaml       
 """
 
 1. Review Base Files
