@@ -74,6 +74,7 @@ Production
 LoadBalancer
 They each will have different HPA settings. This is how directory structure looks:
 
+'''
 ├── base
 │   ├── deployment.yaml
 │   ├── hpa.yaml
@@ -92,6 +93,9 @@ They each will have different HPA settings. This is how directory structure look
         ├── hpa.yaml
         ├── kustomization.yaml
         └── service-nodeport.yaml
+        
+'''
+
 1. Review Base Files
 The base folder holds the common resources, such as the standard deployment.yaml, service.yaml, and hpa.yaml resource configuration files. We’ll explore each of their contents in the following sections.
 
