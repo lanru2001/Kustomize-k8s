@@ -76,6 +76,7 @@ LoadBalancer
 They each will have different HPA settings. This is how directory structure looks:
 
 """
+
 ├── base
 │   ├── deployment.yaml
 │   ├── hpa.yaml
@@ -96,7 +97,7 @@ They each will have different HPA settings. This is how directory structure look
         └── service-nodeport.yaml       
 """
 
-1. Review Base Files
+## 1. Review Base Files
 The base folder holds the common resources, such as the standard deployment.yaml, service.yaml, and hpa.yaml resource configuration files. We’ll explore each of their contents in the following sections.
 
 base/deployment.yaml
@@ -160,7 +161,8 @@ resources:
   - service.yaml
   - deployment.yaml
   - hpa.yaml
-2. Define Dev Overlay Files
+  - 
+## 2. Define Dev Overlay Files
 The overlays folder houses environment-specific overlays. It has 3 sub-folders (one for each environment).
 
 dev/kustomization.yaml
@@ -191,7 +193,7 @@ spec:
       averageUtilization: 90
 If you compare the previous hpa.yaml file with base/hpa.yaml, you’ll notice differences in minReplicas, maxReplicas, and averageUtilization values.
 
-3. Review Patches
+## 3. Review Patches
 To confirm that your patch config file changes are correct before applying to the cluster, you can run kustomize build overlays/dev:
 
 apiVersion: v1
