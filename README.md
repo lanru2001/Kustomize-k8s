@@ -1,13 +1,13 @@
 ## What is Kustomize?
 Kustomize is a configuration management solution that leverages layering to preserve the base settings of your applications and components by overlaying declarative yaml artifacts (called patches) that selectively override default settings without actually changing the original files.
 
-Kustomize configuration management logo
-Kustomize
+## Kustomize configuration management logo
+## Kustomize
 This approach to configuration management is incredibly powerful because most organizations rely on a combination of internally created (which Kustomize supports with bespoke) and common off-the-shelf (which Kustomize supports with COTS) applications to build their products. Overly customizing your source configuration files to satisfy individual use cases not only dramatically minimizes their reusability, it also makes ingesting upgrades either impossible or incredibly painful.
 
-With kustomize, your team can ingest any base file updates for your underlying components while keeping use-case specific customization overrides intact. Another benefit of utilizing patch overlays is that they add dimensionality to your configuration settings, which can be isolated for troubleshooting misconfigurations or layered to create a framework of most-broad to most-specific configuration specifications.
+With kustomize, your team can ingest any base file updates for your underlying components while keeping use-case specific customization overrides intact. Another benefit of utilizing patch overlays is that they add dimensionality to your configuration settings, which can be isolated for troubleshooting, misconfigurations or layered to create a framework of most-broad to most-specific configuration specifications.
 
-To recap, Kustomize relies on the following system of configuration management layering to achieve reusability:
+## To recap, Kustomize relies on the following system of configuration management layering to achieve reusability:
 
 Base Layer
 Specifies the most common resources
