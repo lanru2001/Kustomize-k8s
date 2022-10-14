@@ -4,3 +4,6 @@ resources:
   - rbac.yaml
   - hpa.yaml
   
+commonLabels:
+   owner: azeez.olanrewaju
+  
