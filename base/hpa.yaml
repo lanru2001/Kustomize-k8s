@@ -7,7 +7,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: 
+    name: jenkins-master
   minReplicas: 3
   maxReplicas: 10
   targetCPUUtilizationPercentage: 75
