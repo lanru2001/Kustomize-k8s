@@ -3,8 +3,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: alb-ingress-controller
-  name: alb-ingress-controller
+    app.kubernetes.io/name: jenkins-access
+  name: jenkins-access
 rules:
   - apiGroups:
       - ""
@@ -41,25 +41,21 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:
-    app.kubernetes.io/name: alb-ingress-controller
-  name: alb-ingress-controller
+    app.kubernetes.io/name: jenkins-access
+  name: jenkins-access
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: alb-ingress-controller
+  name: jenkins-access
 subjects:
   - kind: ServiceAccount
-    name: alb-ingress-controller
+    name: jenkins-access
     namespace: kube-system
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app.kubernetes.io/name: alb-ingress-controller
-  name: alb-ingress-controller
+    app.kubernetes.io/name: jenkins-access
+  name: jenkins-access
   namespace: kube-system
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
