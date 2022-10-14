@@ -1,4 +1,6 @@
 bases:
   - ../../base
   
-namePrefix: prod- 
+namePrefix: prod-
+commonLabels: 
+  env: prod
