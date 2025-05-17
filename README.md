@@ -1,14 +1,14 @@
-## What is Kustomize?
+# What is Kustomize?
 Kustomize is a configuration management solution that leverages layering to preserve the base settings of your applications and components by overlaying declarative yaml artifacts (called patches) that selectively override default settings without actually changing the original files.
 
-## Kustomize configuration management logo
-## Kustomize
+# Kustomize configuration management logo
+# Kustomize
 
 This approach to configuration management is incredibly powerful because most organizations rely on a combination of internally created (which Kustomize supports with bespoke) and common off-the-shelf (which Kustomize supports with COTS) applications to build their products. Overly customizing your source configuration files to satisfy individual use cases not only dramatically minimizes their reusability, it also makes ingesting upgrades either impossible or incredibly painful.
 
 With kustomize, your team can ingest any base file updates for your underlying components while keeping use-case specific customization overrides intact. Another benefit of utilizing patch overlays is that they add dimensionality to your configuration settings, which can be isolated for troubleshooting, misconfigurations or layered to create a framework of most-broad to most-specific configuration specifications.
 
-## To recap, Kustomize relies on the following system of configuration management layering to achieve reusability:
+# To recap, Kustomize relies on the following system of configuration management layering to achieve reusability:
 
 Base Layer
 Specifies the most common resources
@@ -26,7 +26,7 @@ The above diagram shows a common use case of a continuous delivery pipeline whic
 You like our article?
 Follow our LinkedIn monthly digest to receive more free educational content like this.
 
-## Kustomize offers the following valuable attributes:
+# Kustomize offers the following valuable attributes:
 
 Kubectl Native
 No need to install or manage as a separate dependency
@@ -38,7 +38,7 @@ Multiple Configurations
 Manages any number of different configurations
 Before we dive into Kustomize’s features, let’s compare Kustomize to native Helm and native Kubectl to better highlight the differentiated functionality that it offers.
 
-## Benefits of Using Kustomize
+# Benefits of Using Kustomize
 1. Reusability
 Kustomize allows you to reuse one base file across all of your environments (development, staging, production) and then overlay unique specifications for each.
 
@@ -48,7 +48,7 @@ Since Kustomize has no templating language, you can use standard YAML to quickly
 3. Easier to Debug
 YAML itself is easy to understand and debug when things go wrong. Pair that with the fact that your configurations are isolated in patches, and you’ll be able to triangulate the root cause of performance issues in no time. Simply compare performance to your base configuration and any other variations that are running.
 
-## Kubernetes Example
+# Kubernetes Example
 Let’s step through how Kustomize works using a deployment scenario involving 3 different environments: dev, staging, and production. In this example we’ll use service, deployment, and horizontal pod autoscaler resources. For the dev and staging environments, there won't be any HPA involved. All of the environments will use different types of services:
 
 Dev
@@ -57,6 +57,7 @@ Staging
 NodePort
 Production
 LoadBalancer
+
 They each will have different HPA settings. This is how directory structure looks:
 
 ```bash
@@ -81,7 +82,7 @@ They each will have different HPA settings. This is how directory structure look
         └── service-nodeport.yaml       
 ```
 
-## 1. Review Base Files
+# 1. Review Base Files
 The base folder holds the common resources, such as the standard deployment.yaml, service.yaml, and hpa.yaml resource configuration files. We’ll explore each of their contents in the following sections.
 ```bash
 base/deployment.yaml
@@ -148,7 +149,7 @@ resources:
 
 ```
 
-## 2. Define Dev Overlay Files
+# 2. Define Dev Overlay Files
 The overlays folder houses environment-specific overlays. It has 3 sub-folders (one for each environment).
 
 dev/kustomization.yaml
@@ -183,7 +184,7 @@ spec:
 ```   
 If you compare the previous hpa.yaml file with base/hpa.yaml, you’ll notice differences in minReplicas, maxReplicas, and averageUtilization values.
 
-## 3. Review Patches
+# 3. Review Patches
 To confirm that your patch config file changes are correct before applying to the cluster, you can run kustomize build overlays/dev:
 
 ```bash
@@ -239,17 +240,20 @@ spec:
 ```    
 4. Apply Patches
 Once you have confirmed that your overlays are correct, use the kubectl apply -k overlays/dev command to apply the the settings to your cluster:
-
-> kubectl apply -k  overlays/dev 
+```bash
+kubectl apply -k  overlays/dev 
 service/frontend-service created
 deployment.apps/frontend-deployment created
 horizontalpodautoscaler.autoscaling/frontend-deployment-hpa created
+```
+
 After handling the dev environment, we will demo the production environment as in our case it’s superset if staging(in terms of k8s resources).
 
 5. Define Prod Overlay Files
 prod/hpa.yaml
 In our production hpa.yaml, let’s say we want to allow up to 10 replicas, with new replicas triggered by a resource utilization threshold of 70% avg CPU usage. This is how that would look:
 
+```bash
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -264,9 +268,11 @@ spec:
     target:
       type: Utilization
       averageUtilization: 70
+```
 prod/rollout-replicas.yaml
 There's also a rollout-replicas.yaml file in our production directory which specifies our rolling strategy:
 
+```bash
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -278,18 +284,24 @@ spec:
     maxSurge: 1
     maxUnavailable: 1
   type: RollingUpdate
+```
+
 prod/service-loadbalancer.yaml
 We use this file to change the service type to LoadBalancer (whereas in staging/service-nodeport.yaml, it is being patched as NodePort).
 
+```bash
 apiVersion: v1
 kind: Service
 metadata:
   name: frontend-service
 spec:
   type: LoadBalancer
+```
+
 prod/kustomization.yaml
 This file operates the same way in the production folder as it does in your base folder: it defines which base file to reference and which patches to apply for your production environment. In this case, it includes two more files: rollout-replica.yaml and service-loadbalancer.yaml.
 
+```bash
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
@@ -298,11 +310,14 @@ patchesStrategicMerge:
 - rollout-replica.yaml
 - hpa.yaml
 - service-loadbalancer.yaml
-- 
+```
+
 6. Review Prod Patches
 Lets see if production values are being applied by running kustomize build overlays/production
 Once you have reviewed, apply your overlays to the cluster with kubectl apply -k overlays/production
-> kubectl apply -k overlays/production
+```bash 
+kubectl apply -k overlays/production
+```
 service/frontend-service created
 deployment.apps/frontend-deployment created
 horizontalpodautoscaler.autoscaling/frontend-deployment-hpa created
@@ -313,12 +328,18 @@ Kustomize comes pre bundled with kubectl version >= 1.14. You can check your ver
 For a stand alone Kustomize installation(aka Kustomize cli) , use the following to set it up.
 
 Run the following:
+
+```bash 
 curl -s "https://raw.githubusercontent.com/\
-kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+   kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+```
 Move Kustomize to your path, so that it can be accessed system wide:
 sudo mv kustomize /usr/local/bin
 Open a new terminal and run kustomize -h to verify:
-> kustomize -h
+
+```bash
+kustomize -h
+```
 
 ```bash
 Manages declarative configuration of Kubernetes.
