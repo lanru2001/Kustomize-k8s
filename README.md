@@ -59,7 +59,7 @@ Production
 LoadBalancer
 They each will have different HPA settings. This is how directory structure looks:
 
-'''bash 
+```bash
 
 ├── base
 │   ├── deployment.yaml
@@ -79,11 +79,11 @@ They each will have different HPA settings. This is how directory structure look
         ├── hpa.yaml
         ├── kustomization.yaml
         └── service-nodeport.yaml       
-'''
+```
 
 ## 1. Review Base Files
 The base folder holds the common resources, such as the standard deployment.yaml, service.yaml, and hpa.yaml resource configuration files. We’ll explore each of their contents in the following sections.
-'''bash
+```bash
 base/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -146,7 +146,7 @@ resources:
   - deployment.yaml
   - hpa.yaml
 
-'''
+```
 
 ## 2. Define Dev Overlay Files
 The overlays folder houses environment-specific overlays. It has 3 sub-folders (one for each environment).
@@ -154,7 +154,7 @@ The overlays folder houses environment-specific overlays. It has 3 sub-folders (
 dev/kustomization.yaml
 This file defines which base configuration to reference and patch using patchesStrategicMerge, which allows partial YAML files to be defined and overlaid on top of the base.
 
-'''bash
+```bash
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
@@ -162,10 +162,10 @@ bases:
 patchesStrategicMerge:
 - hpa.yaml
 dev/hpa.yaml
-'''
+```
 This file has the same resource name as the one located in the base file. This helps in matching the file for patching. This file also contains important values, such as min/max replicas, for the dev environment.
 
-'''bash
+```bash
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -180,13 +180,13 @@ spec:
     target:
       type: Utilization
       averageUtilization: 90
-'''    
+```   
 If you compare the previous hpa.yaml file with base/hpa.yaml, you’ll notice differences in minReplicas, maxReplicas, and averageUtilization values.
 
 ## 3. Review Patches
 To confirm that your patch config file changes are correct before applying to the cluster, you can run kustomize build overlays/dev:
 
-'''bash
+```bash
 apiVersion: v1
 kind: Service
 metadata:
@@ -236,7 +236,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-'''    
+```    
 4. Apply Patches
 Once you have confirmed that your overlays are correct, use the kubectl apply -k overlays/dev command to apply the the settings to your cluster:
 
