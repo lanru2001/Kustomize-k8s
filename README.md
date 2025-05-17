@@ -59,7 +59,7 @@ Production
 LoadBalancer
 They each will have different HPA settings. This is how directory structure looks:
 
-"""
+'''bash 
 
 ├── base
 │   ├── deployment.yaml
@@ -79,11 +79,11 @@ They each will have different HPA settings. This is how directory structure look
         ├── hpa.yaml
         ├── kustomization.yaml
         └── service-nodeport.yaml       
-"""
+'''
 
 ## 1. Review Base Files
 The base folder holds the common resources, such as the standard deployment.yaml, service.yaml, and hpa.yaml resource configuration files. We’ll explore each of their contents in the following sections.
-
+'''bash
 base/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -145,13 +145,16 @@ resources:
   - service.yaml
   - deployment.yaml
   - hpa.yaml
-  - 
+
+'''
+
 ## 2. Define Dev Overlay Files
 The overlays folder houses environment-specific overlays. It has 3 sub-folders (one for each environment).
 
 dev/kustomization.yaml
 This file defines which base configuration to reference and patch using patchesStrategicMerge, which allows partial YAML files to be defined and overlaid on top of the base.
 
+'''bash
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
@@ -159,8 +162,10 @@ bases:
 patchesStrategicMerge:
 - hpa.yaml
 dev/hpa.yaml
+'''
 This file has the same resource name as the one located in the base file. This helps in matching the file for patching. This file also contains important values, such as min/max replicas, for the dev environment.
 
+'''bash
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -175,11 +180,13 @@ spec:
     target:
       type: Utilization
       averageUtilization: 90
+'''    
 If you compare the previous hpa.yaml file with base/hpa.yaml, you’ll notice differences in minReplicas, maxReplicas, and averageUtilization values.
 
 ## 3. Review Patches
 To confirm that your patch config file changes are correct before applying to the cluster, you can run kustomize build overlays/dev:
 
+'''bash
 apiVersion: v1
 kind: Service
 metadata:
@@ -189,7 +196,7 @@ spec:
   - name: http
     port: 8080
   selector:
-    app: frontend-deployment
+    app: frontend-deployment   
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -229,6 +236,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
+'''    
 4. Apply Patches
 Once you have confirmed that your overlays are correct, use the kubectl apply -k overlays/dev command to apply the the settings to your cluster:
 
@@ -297,12 +305,7 @@ Once you have reviewed, apply your overlays to the cluster with kubectl apply -k
 service/frontend-service created
 deployment.apps/frontend-deployment created
 horizontalpodautoscaler.autoscaling/frontend-deployment-hpa created
-Kustomize Best Practices
-Keep your custom resources and their instances in separate packages, otherwise you will encounter race conditions and your creation will get stuck. For example, many people keep both the CertManager CRD and CertManager’s resources in the same package, which can cause problems. Most of the time, reapplying the YAML fixes the issue. But it's good practice to keep them separately.
-Try to keep the common values like namespace, common metadata in the base file.
-Organize your resources by kind, using the following naming convention: lowercase-hypenated.yaml (e.g., horizontal-pod-autoscaler.yaml). Place services in the service.yaml file.
-Follow standard directory structure, using bases/ for base files and patches/ or overlays/ for environment-specific files.
-While developing or before pushing to git, run kubectl kustomize cfg fmt file_name to format the file and set the indentation right.
+
 Install Kustomize
 Kustomize comes pre bundled with kubectl version >= 1.14. You can check your version using kubectl version. If version is 1.14 or greater there's no need to take any steps.
 
@@ -335,15 +338,3 @@ Available Commands:
 Flags:
   -h, --help          help for kustomize
       --stack-trace   print a stack-trace on error
-
-Additional help topics:
-  kustomize docs-fn                   [Alpha] Documentation for developing and invoking Configuration Functions.
-  kustomize docs-fn-spec              [Alpha] Documentation for Configuration Functions Specification.
-  kustomize docs-io-annotations       [Alpha] Documentation for annotations used by io.
-  kustomize docs-merge                [Alpha] Documentation for merging Resources (2-way merge).
-  kustomize docs-merge3               [Alpha] Documentation for merging Resources (3-way merge).
-  kustomize tutorials-command-basics  [Alpha] Tutorials for using basic config commands.
-  kustomize tutorials-function-basics [Alpha] Tutorials for using functions.
-
-Use "kustomize [command] --help" for more information about a command.
-For more installation options, see the Kubectl documentation.
