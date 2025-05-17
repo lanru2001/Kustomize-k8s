@@ -298,6 +298,7 @@ patchesStrategicMerge:
 - rollout-replica.yaml
 - hpa.yaml
 - service-loadbalancer.yaml
+- 
 6. Review Prod Patches
 Lets see if production values are being applied by running kustomize build overlays/production
 Once you have reviewed, apply your overlays to the cluster with kubectl apply -k overlays/production
@@ -319,6 +320,7 @@ sudo mv kustomize /usr/local/bin
 Open a new terminal and run kustomize -h to verify:
 > kustomize -h
 
+```bash
 Manages declarative configuration of Kubernetes.
 See https://sigs.k8s.io/kustomize
 
@@ -338,3 +340,4 @@ Available Commands:
 Flags:
   -h, --help          help for kustomize
       --stack-trace   print a stack-trace on error
+```
