@@ -1,43 +1,15 @@
 # What is Kustomize?
+
 Kustomize is a configuration management solution that leverages layering to preserve the base settings of your applications and components by overlaying declarative yaml artifacts (called patches) that selectively override default settings without actually changing the original files.
-
-# Kustomize
-
-This approach to configuration management is incredibly powerful because most organizations rely on a combination of internally created (which Kustomize supports with bespoke) and common off-the-shelf (which Kustomize supports with COTS) applications to build their products. Overly customizing your source configuration files to satisfy individual use cases not only dramatically minimizes their reusability, it also makes ingesting upgrades either impossible or incredibly painful.
-
-With kustomize, your team can ingest any base file updates for your underlying components while keeping use-case specific customization overrides intact. Another benefit of utilizing patch overlays is that they add dimensionality to your configuration settings, which can be isolated for troubleshooting, misconfigurations or layered to create a framework of most-broad to most-specific configuration specifications.
 
 # To recap, Kustomize relies on the following system of configuration management layering to achieve reusability:
 
-Base Layer
-Specifies the most common resources
-Patch Layers
-Specifies use case specific resources
-Some Real-World Context
-Let’s say that you are using a Helm chart from a particular vendor. It’s a close fit for your use case, but not perfect, and requires some customizations. So you fork the Helm chart, make your configuration changes, and apply it to your cluster. A few months later, your vendor releases a new version of the chart you’re using that includes some important features you need. In order to leverage those new features, you have to fork the new Helm chart and re-apply your configuration changes.
+Base Layer specifies the most common resources
+Patch Layers specifies use case specific resources
 
-At scale, re-forking and re-customizing these Helm charts becomes a large source of overhead with an increased risk of misconfigurations, threatening the stability of your product and services.
-
-Configuring continuous delivery with Kustomize, Git, and Helm
-Kustomize works with Git and Helm to make the continuous delivery pipeline easier to configure
-The above diagram shows a common use case of a continuous delivery pipeline which starts with a git event. The event may be a push, merge or create a new branch. In this case, Helm is used to generate the yaml files and Kustomize will patch it with environment specific values based on the events. For example: if the branch is master and tied to the production environment, then kustomize will apply the values applicable to production.
-
-You like our article?
-Follow our LinkedIn monthly digest to receive more free educational content like this.
-
-# Kustomize offers the following valuable attributes:
-
-Kubectl Native
-No need to install or manage as a separate dependency
-Plain Yaml
-No complex templating language
-Declarative
-Purely declarative (just like Kubectl)
-Multiple Configurations
-Manages any number of different configurations
-Before we dive into Kustomize’s features, let’s compare Kustomize to native Helm and native Kubectl to better highlight the differentiated functionality that it offers.
 
 # Benefits of Using Kustomize
+
 1. Reusability
 Kustomize allows you to reuse one base file across all of your environments (development, staging, production) and then overlay unique specifications for each.
 
@@ -48,7 +20,6 @@ Since Kustomize has no templating language, you can use standard YAML to quickly
 YAML itself is easy to understand and debug when things go wrong. Pair that with the fact that your configurations are isolated in patches, and you’ll be able to triangulate the root cause of performance issues in no time. Simply compare performance to your base configuration and any other variations that are running.
 
 # Kubernetes Example
-Let’s step through how Kustomize works using a deployment scenario involving 3 different environments: dev, staging, and production. In this example we’ll use service, deployment, and horizontal pod autoscaler resources. For the dev and staging environments, there won't be any HPA involved. All of the environments will use different types of services:
 
 Dev
 ClusterIP
